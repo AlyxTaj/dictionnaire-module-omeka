@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sortiaria {%block titre %}{%endblock%}</title>
+        {% include "partials/css.html" %}
+        {% include "partials/metadata.html" %}
+        <style type="text/css">
+            .hero  {
+                background-position: center bottom;
+                padding:29vh;
+                background-image: url({{url_for("static", filename="images/gallica_btv1b8577579h.jpg")}});
+            }
+            .container .hero {
+                background-image: none;
+            }
+        </style>
+    </head>
+    <body>
+
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+        <a class="navbar-brand" href="{{ url_for('accueil') }}">Sortiaria</a>
+
+        <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('browse')}}">Index</a>
+              </li>
+            {% if not current_user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('inscription')}}">Inscription</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('connexion')}}">Connexion</a>
+              </li>
+              
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('deconnexion')}}">Déconnexion ({{current_user.user_nom}})</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('ajout_mot')}}">Contribuer</a>
+              </li>
+            {% endif %}
+        </ul>
+      </nav>
+      {% block afternav %}{%endblock%}
+      <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          <div class="row">
+              <div class="col">
+                {% for category, message in messages %}
+                  <div class="alert alert-{{category}}" role="alert">{{ message }}</div>
+                {% endfor %}
+              </div>
+          </div>
+          {% endif %}
+        {% endwith %}
+        <div class="row">
+            <div class="col">
+            {% block corps %}{% endblock %}
+            </div>
+        </div>
+      </div>
+    </body>
+</html>
